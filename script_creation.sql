@@ -17,7 +17,7 @@ CREATE TABLE abonne(
     CONSTRAINT "PK_NumAbonne" PRIMARY KEY (NumAbonne)
     );
 
-CREAT formule(
+CREAT TABLE formule(
     CodeFormule SERIAL,
     LibelleFormule VARCHAR (15),
     FraisAdhesion INT,
@@ -28,3 +28,10 @@ CREAT formule(
     CONSTRAINT "pk_CodeFormule" PRIMARY KEY (CodeFormule)
     );
 
+CREATE TABLE adhere(
+    NumAbonne INT,
+    CodeFormule INT,
+    CONSTRAINT "pk_NumAbonne_CodeFormule" PRIMARY KEY (NumAbonne, CodeFormule),
+    CONSTRAINT "fk_NumAbonne" FOREIGN KEY (NumAbonne) REFERENCES abonne(NumAbonne),
+    CONSTRAINT "fk_CodeFormule" FOREIGN KEY (CodeFormule) REFERENCES formule(CodeFormule)
+);

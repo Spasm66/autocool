@@ -12,7 +12,7 @@ CREATE TABLE abonne(
     Email VARCHAR (30),
     NumPermis VARCHAR (30),
     LieuPermis VARCHAR (30),
-    DAtePermis DATE,
+    DatePermis DATE,
     PaimentAdhesion BOOLEAN,
     PaimentCaution BOOLEAN,
     RIBfourni VARCHAR (50),

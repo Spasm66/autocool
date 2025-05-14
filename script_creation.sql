@@ -51,5 +51,5 @@ CREATE TABLE categorie_vehicule(
     CodeCateg CHAR (1) NOT NULL,
     LibelleCateg VARCHAR (20),
     CONSTRAINT "pk_CodeCateg" PRIMARY KEY (CodeCateg),
-    CONSTRAINT "chk_CodeTranche" CHECK (CodeTrancheH = 'H' OR CodeTrancheH = 'J' OR CodeTrancheH = 'S')
+    CONSTRAINT "chk_CodeCateg" CHECK (CodeCateg = 'S' OR CodeCateg = 'M' OR CodeCateg = 'L')
 );

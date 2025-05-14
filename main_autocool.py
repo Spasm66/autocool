@@ -40,22 +40,16 @@ with psycopg.connect("host="+HOST+" user="+USERNAME+" password="+PASS) as conn:
                 exit("error when running: " + commande + " : " + str(e))
         Affi_adherent(1)
         print(cur.fetchall())
-        def Ajout_adherent(
-                Nom  ,
-                Prenom ,
-                DateNaissance ,
-                Rue ,
-                CodePostal ,
-                Tel ,
-                TelMobile ,
-                Email ,
-                NumPermis ,
-                LieuPermis ,
-                DatePermis ,
-                PaimentAdhesion ,
-                PaimentCaution ,
-                RIBfourni,
-                numformule ):
+        def Ajout_adherent(adherent_data):
+            # Unpack the tuple into individual variables
+            Nom, Prenom, DateNaissance, Rue, CodePostal, Tel, TelMobile, Email, NumPermis, LieuPermis, DatePermis, PaimentAdhesion, PaimentCaution, RIBfourni, nomformule = adherent_data
+            if nomformule == "Classique":
+                numformule = 1
+            elif nomformule == "Coopérative":
+                numformule = 2
+            elif nomformule == "Liberté":
+                numformule = 3
+
             commande_abonne = 'INSERT INTO abonne (Nom, Prenom, DateNaissance, Rue, CodePostal, Tel, TelMobile, Email, NumPermis, LieuPermis, DatePermis, PaimentAdhesion, PaimentCaution, RIBfourni)'\
             'VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'
            
@@ -84,24 +78,15 @@ with psycopg.connect("host="+HOST+" user="+USERNAME+" password="+PASS) as conn:
                 exit("error when running: " + commande_adhere + " : " + str(e))
 
 
-        Ajout_adherent(
-            Nom="Dupont",
-            Prenom="Jean",
-            DateNaissance="1985-05-15",
-            Rue="123 Rue de Paris",
-            CodePostal="75001",
-            Tel="0123456789",
-            TelMobile="0612345678",
-            Email="jean.dupont@example.com",
-            NumPermis="123456789",
-            LieuPermis="Paris",
-            DatePermis="2005-06-10",
-            PaimentAdhesion=True,
-            PaimentCaution=True,
-            RIBfourni="FR7630001007941234567890185",
-            numformule=1
-)
-        Affi_adherent(13)
+        adherent_data = (
+            "conard19q", "Jean", "1985-05-15", "123 Rue de Paris", "75001",
+            "0123456789", "0612345678", "jean.dupont@example.com", "123456789",
+            "Paris", "2005-06-10", True, True, "FR7630001007941234567890185", "Classique"
+        )
+
+        Ajout_adherent(adherent_data)
+
+        Affi_adherent(19)
         print(cur.fetchall())
 
 
@@ -161,6 +146,7 @@ with psycopg.connect("host="+HOST+" user="+USERNAME+" password="+PASS) as conn:
                         reponce11, reponce12, reponce13, reponce14, reponce15
                     )
 
+
                     return reponses
 
                 except ValueError as e:
@@ -208,9 +194,7 @@ with psycopg.connect("host="+HOST+" user="+USERNAME+" password="+PASS) as conn:
                             reponce = input("choisiser une formule ( « Classique », « Coopérative » ou « Liberté »)\n" \
                             "ou retourner au menu principal : q\n")
                     elif reponce == "ajout":
-                        m1ajout =True
-                        while m1ajout :
-                            Ajout_adherent(formulaire())
+                        Ajout_adherent(formulaire())
                     else :
                         print("votre entrer comporte une erreur ")
             elif reponce =="2":

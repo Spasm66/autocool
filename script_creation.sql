@@ -40,7 +40,7 @@ CREATE TABLE adhere(
 
 --MEA BESOIN 2
 
-CREATE TABLE trache_horaire(
+CREATE TABLE tranche_horaire(
     CodeTrancheH    CHAR (1) NOT NULL,
     Duree           INT,
     CONSTRAINT "pk_CodeTrancheH"    PRIMARY KEY (CodeTrancheH),
@@ -116,7 +116,7 @@ CREATE TABLE type_vehicule(
 CREATE TABLE se_situe(
     NumVehicule INT,
     NumStation  INT,
-    CONSTRAINT "pk_NumVehicule" PRIMARY KEY (NumVehicule),
+    CONSTRAINT "pk_NumVehicule_se_situe" PRIMARY KEY (NumVehicule),
     CONSTRAINT "fk_NumVehicule" FOREIGN KEY (NumVehicule) REFERENCES vehicule(NumVehicule),
     CONSTRAINT "fk_NumStation"  FOREIGN KEY (NumStation) REFERENCES station(NumStation)
 );
@@ -124,15 +124,15 @@ CREATE TABLE se_situe(
 CREATE TABLE appartient(
     NumVehicule INT,
     CodeTypeV   INT,
-    CONSTRAINT "pk_NumVehicule" PRIMARY KEY (NumVehicule),
+    CONSTRAINT "pk_NumVehicule_appartient" PRIMARY KEY (NumVehicule),
     CONSTRAINT "fk_NumVehicule" FOREIGN KEY (NumVehicule) REFERENCES vehicule(NumVehicule),
     CONSTRAINT "fk_CodeTypeV"  FOREIGN KEY (CodeTypeV) REFERENCES type_vehicule(CodeTypeV)
 );
 
 CREATE TABLE correspond(
     CodeTypeV   INT,
-    CodeCateg   INT,
-    CONSTRAINT "pk_CodeTypeV" PRIMARY KEY (CodeTypeV),
+    CodeCateg   CHAR (1),
+    CONSTRAINT "pk_CodeTypeV_correspond" PRIMARY KEY (CodeTypeV),
     CONSTRAINT "fk_CodeTypeV"  FOREIGN KEY (CodeTypeV) REFERENCES type_vehicule(CodeTypeV),
     CONSTRAINT "fk_CodeCateg" FOREIGN KEY (CodeCateg) REFERENCES categorie_vehicule(CodeCateg)
 );

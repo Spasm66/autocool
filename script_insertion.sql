@@ -14,3 +14,72 @@ VALUES
     (1, 1),
     (2, 2),
     (3, 3);
+
+INSERT INTO tranche_horaire (CodeTrancheH, Duree)
+VALUES
+    ('H', 1),
+    ('J', 24),
+    ('S', 168);
+INSERT INTO categorie_vehicule (CodeCateg, LibelleCateg)
+VALUES
+    ('S', 'Small'),
+    ('M', 'Medium'),
+    ('L', 'Large');
+INSERT INTO tranche_km (CodeTrancheKm, MinKm, MaxKm)
+VALUES
+    (1, 0, 50),
+    (2, 50, 200),
+    (3, 200, NULL);
+INSERT INTO facturer1 (CodeFormule, CodeTrancheH, CodeCateg, TarifH)
+VALUES
+    (1, 'H', 'S', 5),
+    (1, 'J', 'S', 20),
+    (1, 'S', 'S', 100),
+    (2, 'H', 'M', 7),
+    (2, 'J', 'M', 25),
+    (2, 'S', 'M', 120),
+    (3, 'H', 'L', 10),
+    (3, 'J', 'L', 30),
+    (3, 'S', 'L', 150);
+INSERT INTO facturer2 (CodeFormule, CodeTrancheKm, CodeCateg, TarifKm)
+VALUES
+    (1, 1, 'S', 0.10),
+    (1, 2, 'S', 0.08),
+    (1, 3, 'S', 0.05),
+    (2, 1, 'M', 0.15),
+    (2, 2, 'M', 0.12),
+    (2, 3, 'M', 0.10),
+    (3, 1, 'L', 0.20),
+    (3, 2, 'L', 0.18),
+    (3, 3, 'L', 0.15);
+INSERT INTO vehicule (Kilometrage, NiveauEssence)
+VALUES
+    (10000, 50),
+    (15000, 30),
+    (20000, 70);
+INSERT INTO station (LieuStation, VilleStation, CPStation)
+VALUES
+    ('Station 1', 'Paris', '75001'),
+    ('Station 2', 'Lyon', '69002'),
+    ('Station 3', 'Marseille', '13003');
+INSERT INTO type_vehicule (LibelleTypeV, NbPlaces, Automatique)
+VALUES
+    ('City', 4, TRUE),
+    ('Poly', 5, FALSE),
+    ('Break', 5, TRUE),
+    ('Util', 3, FALSE);
+INSERT INTO se_situe (NumVehicule, NumStation)
+VALUES
+    (1, 1),
+    (2, 2),
+    (3, 3);
+INSERT INTO appartient (NumVehicule, CodeTypeV)
+VALUES
+    (1, 1),
+    (2, 2),
+    (3, 3);
+INSERT INTO correspond (CodeTypeV, CodeCateg)
+VALUES
+    (1, 'S'),
+    (2, 'M'),
+    (3, 'L');

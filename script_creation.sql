@@ -76,7 +76,7 @@ CREATE TABLE facturer1(
 );
 
 CREATE TABLE facturer2(
-    CodeFacture2    SERIAL
+    CodeFacture2    SERIAL,
     CodeFormule     INT,
     CodeTrancheKm   CHAR (1),
     CodeCateg       CHAR (1),

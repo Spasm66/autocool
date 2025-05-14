@@ -10,22 +10,24 @@ with psycopg.connect("host="+HOST+" user="+USERNAME+" password="+PASS) as conn:
     #préparation de l'exécution des requêtes (à ne faire qu'une fois)
     with conn.cursor(row_factory=psycopg.rows.dict_row) as cur:
         creation_table = "script_creation.sql"
+        """
         try :
             # Lecture du fichier SQL
             with open(creation_table, 'r') as f:
                 sql_commands = f.read()        
             cur.execute(sql_commands)
-            conn.commit()
+            #conn.commit()
             print("Fichier creation_table exécuté avec succès.")
         except Exception as e:
-            print("Une erreur est survenue (si du au fait que les table existe deja pas de probleme): {e}")
-        
+            print("Une erreur est survenue (si du au fait que les table existe deja pas de probleme): "+ str(e))
+        """
         # test si deja des donnes
-        test_abonne = 'select * from abonne '
+        test_abonne = 'SELECT * FROM abonne;'
+        
         try:
             cur.execute(test_abonne)
             print("Fichier SQL exécuté avec succès.")
-        except Exception as e:
+        except psycopg.Error as e:
             exit("error when running: " + test_abonne + " : " + str(e))
         if cur.rowcount == 0:
             #charger les donnés
@@ -42,12 +44,15 @@ with psycopg.connect("host="+HOST+" user="+USERNAME+" password="+PASS) as conn:
             
         def lst_aderent(formule):
             # formule = (« Classique » ou « Coopérative « ou « Liberté »)
-            commande = 'select NumAbonne from abonne , formule ,adhere  where LibelleFormule =(%(id)s) '
+            commande = 'select NumAbonne from  formule ,adhere  where LibelleFormule =(%(id)s) and  formule.CodeFormule=adhere.CodeFormule '
             try:
                 cur.execute(commande,{'id':formule})
                 print("commande SQL exécuté avec succès.")
             except Exception as e:
                 exit("error when running: " + commande + " : " + str(e))
+        lst_aderent("Classique")
+        print(cur.fetchall())
+        
         def Affi_adherent(num_abo):
             #Affichage d’un adhérent en fonction de son numero d'aderent
             commande = 'select * from abonne  where NumAbonne =(%(id)s) '
@@ -56,6 +61,8 @@ with psycopg.connect("host="+HOST+" user="+USERNAME+" password="+PASS) as conn:
                 print("commande SQL exécuté avec succès.")
             except Exception as e:
                 exit("error when running: " + commande + " : " + str(e))
+        Affi_adherent(1)
+        print(cur.fetchall())
         def Ajout_adherent(
     Nom  ,
     Prenom ,

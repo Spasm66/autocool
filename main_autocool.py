@@ -1,4 +1,5 @@
 import psycopg
+from datetime import datetime
 
 # Try to connect to an existing database
 print('Connexion à la base de données...')
@@ -102,6 +103,69 @@ with psycopg.connect("host="+HOST+" user="+USERNAME+" password="+PASS) as conn:
 )
         Affi_adherent(13)
         print(cur.fetchall())
+
+
+        
+
+        def formulaire():
+            def validate_date(date_str):
+                try:
+                    return datetime.strptime(date_str, '%Y-%m-%d').date()
+                except ValueError:
+                    raise ValueError("Invalid date format. Use YYYY-MM-DD.")
+
+            def validate_boolean(bool_str):
+                bool_str_lower = bool_str.lower()
+                if bool_str_lower in ('true', '1'):
+                    return True
+                elif bool_str_lower in ('false', '0'):
+                    return False
+                else:
+                    raise ValueError("Invalid boolean value. Use true/false or 1/0.")
+
+            def validate_phone(phone_str):
+                if  len(phone_str) != 10:
+                    raise ValueError("Phone number must be 10 digits.")
+                return phone_str
+
+            def validate_postal_code(postal_str):
+                if len(postal_str) != 5:
+                    raise ValueError("Postal code must be 5 characters long.")
+                return postal_str
+
+            while True:
+                try:
+                    reponce1 = input("Nom :")
+                    reponce2 = input("Prenom :")
+                    reponce3 = validate_date(input("DateNaissance (YYYY-MM-DD):"))
+                    reponce4 = input("Rue :")
+                    reponce5 = validate_postal_code(input("CodePostal :"))
+                    reponce6 = validate_phone(input("Tel :"))
+                    reponce7 = validate_phone(input("TelMobile :"))
+                    reponce8 = input("Email :")
+                    reponce9 = input("NumPermis :")
+                    reponce10 = input("LieuPermis :")
+                    reponce11 = validate_date(input("DatePermis (YYYY-MM-DD):"))
+                    reponce12 = validate_boolean(input("PaimentAdhesion (true/false):"))
+                    reponce13 = validate_boolean(input("PaimentCaution (true/false):"))
+                    reponce14 = input("RIBfourni:")
+                    reponce15 = input("( choisiser une formule « Classique », « Coopérative » ou « Liberté »):")
+
+                    if reponce15 not in ("Classique", "Coopérative", "Liberté"):
+                        raise ValueError("Invalid formula. Choose « Classique », « Coopérative » or « Liberté ».")
+
+                    # Create a tuple with all the responses
+                    reponses = (
+                        reponce1, reponce2, reponce3, reponce4, reponce5,
+                        reponce6, reponce7, reponce8, reponce9, reponce10,
+                        reponce11, reponce12, reponce13, reponce14, reponce15
+                    )
+
+                    return reponses
+
+                except ValueError as e:
+                    print(f"Error: {e}. Please try again.")
+                
         """
         #besoin 2
         def liste_des_tarifs(formule):
@@ -132,13 +196,21 @@ with psycopg.connect("host="+HOST+" user="+USERNAME+" password="+PASS) as conn:
                 m1 = True
                 while m1 :
                     reponce = input("choisiser une formule ( « Classique », « Coopérative » ou « Liberté »)\n" \
-                    "ou retourner au menu principal : q\n")
+                    "ou retourner au menu principal : q\n"
+                    "ou ajout d'un aderant : ajout\n")
                     if reponce == "q":
                         m1 = False
                     elif reponce in("Classique","Coopérative","Liberté"):
                         lst_aderent(reponce)
                         print(cur.fetchall())
-
+                        m11 = True
+                        while m11 :
+                            reponce = input("choisiser une formule ( « Classique », « Coopérative » ou « Liberté »)\n" \
+                            "ou retourner au menu principal : q\n")
+                    elif reponce == "ajout":
+                        m1ajout =True
+                        while m1ajout :
+                            Ajout_adherent(formulaire())
                     else :
                         print("votre entrer comporte une erreur ")
             elif reponce =="2":

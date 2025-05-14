@@ -153,22 +153,21 @@ with psycopg.connect("host="+HOST+" user="+USERNAME+" password="+PASS) as conn:
                     print(f"Error: {e}. Please try again.")
                 
         
-        #besoin 2
-        def liste_des_tarifs(formule):
-            # formule = (« Classique » ou « Coopérative « ou « Liberté »)
-            pass
-        def udate_tarif  (formulaire_udate_tarif):
-            # formule = (« Classique » ou « Coopérative « ou « Liberté »)
-            pass
-        """
         #besoin 3
         def lst_vehicules(categorie):
-            #Liste des véhicules d’une catégorie (« S », « M » ou « L »
+            #Liste des véhicules d’une catégorie (« S », « M » ou « L »)
+            commande = 'select numvehicule from categorie_vehicule,type_vehicule,'
+            try:
+                cur.execute(commande,{'id':categorie})
+                print("commande SQL exécuté avec succès.")
+            except Exception as e:
+                exit("error when running: " + commande + " : " + str(e))
 
         def aff_véhicules(numvéhicules):
-
+            pass
         def add_véhicules():
-        """
+            pass
+        
         main = True
         while main :
             reponce = input("Sous-menu « Gestion des adhérents » : 1 \n" \

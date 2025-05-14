@@ -13,11 +13,11 @@ CREATE TABLE abonne(
     DAtePermis DATE,
     PaimentAdhesion BOOLEAN,
     PaimentCaution BOOLEAN,
-    RIBfourni VARCHAR (50)
+    RIBfourni VARCHAR (50),
     CONSTRAINT "PK_NumAbonne" PRIMARY KEY (NumAbonne)
     );
 
-CREAT TABLE formule(
+CREATE TABLE formule(
     CodeFormule SERIAL,
     LibelleFormule VARCHAR (15),
     FraisAdhesion INT,

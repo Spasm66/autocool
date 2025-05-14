@@ -60,7 +60,7 @@ CREATE TABLE tranche_km(
     MaxKm           INT,
     CONSTRAINT "pk_CodeTrancheKm"   PRIMARY KEY (CodeTranchekm)
     CONSTRAINT "chk_MinKm"          CHECK (MinKm = 0 OR MinKm = 50 OR MinKm = 200),
-    CONSTRAINT "chk_MaxKm"          CHECK (MinKm = 50 OR MinKm = 200 OR MinKm = NULL)
+    CONSTRAINT "chk_MaxKm"          CHECK (MaxKm = 50 OR MaxKm = 200 OR MaxKm IS NULL)
 );
 
 CREATE TABLE facturer1(

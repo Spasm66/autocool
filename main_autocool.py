@@ -153,15 +153,36 @@ with psycopg.connect("host="+HOST+" user="+USERNAME+" password="+PASS) as conn:
                     print(f"Error: {e}. Please try again.")
                 
         
+        #besoin 2
+        def affi_tarif(formule):
+            if formule == "Classique":
+                numformule = 1
+            elif formule == "Coopérative":
+                formule = 2
+            elif formule == "Liberté":
+                numformule = 3
+            command = 'SELECT CodeTrancheH, CodeFormule, CodeCateg, TarifH FROM facturer1 WHERE CodeFormule = %s'
+            try:
+                cur.execute(command, numformule)
+            except Exception as e:
+                        exit("error when running: " + command + " : " + str(e))
+
+
+
         #besoin 3
+        #a verifier
         def lst_vehicules(categorie):
             #Liste des véhicules d’une catégorie (« S », « M » ou « L »)
-            commande = 'select numvehicule from categorie_vehicule,type_vehicule,'
+            commande = 'select NumVehicule from categorie_vehicule ,type_vehicule ,appartient ,correspond where LibelleCateg = %(id)s ' \
+            'and categorie_vehicule.CodeCateg = correspond.CodeCateg' \
+            'and correspond.CodeTypeV = type_vehicule.CodeTypeV' \
+            'and appartient.CodeTypeV = type_vehicule.CodeTypeV' 
             try:
                 cur.execute(commande,{'id':categorie})
                 print("commande SQL exécuté avec succès.")
             except Exception as e:
                 exit("error when running: " + commande + " : " + str(e))
+        lst_vehicules("S")
 
         def aff_véhicules(numvéhicules):
             pass

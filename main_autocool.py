@@ -152,14 +152,15 @@ with psycopg.connect("host="+HOST+" user="+USERNAME+" password="+PASS) as conn:
                 except ValueError as e:
                     print(f"Error: {e}. Please try again.")
                 
-        """
+        
         #besoin 2
         def liste_des_tarifs(formule):
             # formule = (« Classique » ou « Coopérative « ou « Liberté »)
-            
-        def udate_tarif  (formule):
+            pass
+        def udate_tarif  (formulaire_udate_tarif):
             # formule = (« Classique » ou « Coopérative « ou « Liberté »)
-
+            pass
+        """
         #besoin 3
         def lst_vehicules(categorie):
             #Liste des véhicules d’une catégorie (« S », « M » ou « L »
@@ -191,14 +192,26 @@ with psycopg.connect("host="+HOST+" user="+USERNAME+" password="+PASS) as conn:
                         print(cur.fetchall())
                         m11 = True
                         while m11 :
-                            reponce = input("choisiser une formule ( « Classique », « Coopérative » ou « Liberté »)\n" \
+                            reponce = input("entre votre NumAbonne :\n" \
                             "ou retourner au menu principal : q\n")
+                            if reponce == "q":
+                                m11 = False
+                            else :
+                                try :
+                                    Affi_adherent(int(reponce))
+                                    print(cur.fetchall())
+                                except Exception as e:
+                                    print("votre entrer comporte une erreur "+ str(e))
                     elif reponce == "ajout":
                         Ajout_adherent(formulaire())
-                    else :
-                        print("votre entrer comporte une erreur ")
+                    
+                        
             elif reponce =="2":
-                pass
+                m2 = True
+                while m2 :
+                    reponce = input("choisiser une formule ( « Classique », « Coopérative » ou « Liberté »)\n" \
+                    "ou retourner au menu principal : q\n"
+                    "ou modif d'un prix : modif\n")
             elif reponce =="3":
                 pass
             elif reponce =="4":

@@ -86,3 +86,53 @@ CREATE TABLE facturer2(
     CONSTRAINT "fk_CodeTrancheKm"   FOREIGN KEY (CodeTrancheKm) REFERENCES trache_horaire(CodeTrancheH),
     CONSTRAINT "fk_CodeCateg"       FOREIGN KEY (CodeCateg) REFERENCES categorie_vehicule(CodeCateg)
 );
+
+--MEA BESOIN 3
+
+CREATE TABLE vehicule(
+    NumVehicule     SERIAL,
+    Kilometrage     INT,
+    NiveauEssence   INT,
+    CONSTRAINT "pk_NumVehicule" PRIMARY KEY (NumVehicule)
+);
+
+CREATE TABLE station(
+    NumStation      SERIAL,
+    LieuStation     VARCHAR (20),
+    VilleStation    VARCHAR (20),
+    CPStation       VARCHAR (5),
+    CONSTRAINT "pk_NumStation"  PRIMARY KEY (NumStation)
+);
+
+CREATE TABLE type_vehicule(
+    CodeTypeV       SERIAL,
+    LibelleTypeV    VARCHAR (20),
+    NbPlaces        INT,
+    Automatique BOOLEAN,
+    CONSTRAINT "pk_CodeTypeV"       PRIMARY KEY (CodeTypeV),
+    CONSTRAINT "chk_LibelleTypeV"   CHECK (LibelleTypeV = 'City' OR LibelleTypeV = 'Poly' OR LibelleTypeV = 'Break', OR LibelleTypeV = 'Util')
+);
+
+CREATE TABLE se_situe(
+    NumVehicule INT,
+    NumStation  INT,
+    CONSTRAINT "pk_NumVehicule" PRIMARY KEY (NumVehicule),
+    CONSTRAINT "fk_NumVehicule" FOREIGN KEY (NumVehicule) REFERENCES vehicule(NumVehicule),
+    CONSTRAINT "fk_NumStation"  FOREIGN KEY (NumStation) REFERENCES station(NumStation)
+);
+
+CREATE TABLE appartient(
+    NumVehicule INT,
+    CodeTypeV   INT,
+    CONSTRAINT "pk_NumVehicule" PRIMARY KEY (NumVehicule),
+    CONSTRAINT "fk_NumVehicule" FOREIGN KEY (NumVehicule) REFERENCES vehicule(NumVehicule),
+    CONSTRAINT "fk_CodeTypeV"  FOREIGN KEY (CodeTypeV) REFERENCES type_vehicule(CodeTypeV)
+);
+
+CREATE TABLE correspond(
+    CodeTypeV   INT,
+    CodeCateg   INT,
+    CONSTRAINT "pk_CodeTypeV" PRIMARY KEY (CodeTypeV),
+    CONSTRAINT "fk_CodeTypeV"  FOREIGN KEY (CodeTypeV) REFERENCES type_vehicule(CodeTypeV),
+    CONSTRAINT "fk_CodeCateg" FOREIGN KEY (CodeCateg) REFERENCES categorie_vehicule(CodeCateg)
+);

@@ -15,7 +15,7 @@ CREATE TABLE abonne(
     DatePermis      DATE,
     PaimentAdhesion BOOLEAN,
     PaimentCaution  BOOLEAN,
-    RIBfourni       VARCHAR (50),
+    RIBfourni       VARCHAR (34),
     CONSTRAINT "PK_NumAbonne"   PRIMARY KEY (NumAbonne)
     );
 
@@ -71,19 +71,19 @@ CREATE TABLE facturer1(
     TarifH          INT,
     CONSTRAINT "pk_CodeFacture1"    PRIMARY KEY (CodeFacture1),
     CONSTRAINT "fk_CodeFormule"     FOREIGN KEY (CodeFormule) REFERENCES formule(CodeFormule),
-    CONSTRAINT "fk_CodeTrancheH"    FOREIGN KEY (CodeTrancheH) REFERENCES trache_horaire(CodeTrancheH),
+    CONSTRAINT "fk_CodeTrancheH"    FOREIGN KEY (CodeTrancheH) REFERENCES tranche_horaire(CodeTrancheH),
     CONSTRAINT "fk_CodeCateg"       FOREIGN KEY (CodeCateg) REFERENCES categorie_vehicule(CodeCateg)
 );
 
 CREATE TABLE facturer2(
     CodeFacture2    SERIAL,
     CodeFormule     INT,
-    CodeTrancheKm   INT,
+    CodeTrancheKm   CHAR (1),
     CodeCateg       CHAR (1),
     TarifKm         INT,
     CONSTRAINT "pk_CodeFacture2"    PRIMARY KEY (CodeFacture2),
     CONSTRAINT "fk_CodeFormule"     FOREIGN KEY (CodeFormule) REFERENCES formule(CodeFormule),
-    CONSTRAINT "fk_CodeTrancheKm"   FOREIGN KEY (CodeTrancheKm) REFERENCES tranche_km(CodeTrancheKm),
+    CONSTRAINT "fk_CodeTrancheKm"   FOREIGN KEY (CodeTrancheKm) REFERENCES tranche_horaire(CodeTrancheH),
     CONSTRAINT "fk_CodeCateg"       FOREIGN KEY (CodeCateg) REFERENCES categorie_vehicule(CodeCateg)
 );
 

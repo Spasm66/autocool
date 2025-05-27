@@ -194,7 +194,8 @@ with psycopg.connect("host="+HOST+" user="+USERNAME+" password="+PASS) as conn:
 
         def aff_véhicules(numvéhicules):
             numvéhicules = int(numvéhicules)
-            commande = 'select vehicule.NumVehicule, Kilometrage ,NiveauEssence,type_vehicule.LibelleTypeV , NbPlaces ,Automatique '\
+            commande = 'select vehicule.NumVehicule, Kilometrage ,NiveauEssence,type_vehicule.LibelleTypeV , NbPlaces ,Automatique ,' \
+            'station.LieuStation, station.VilleStation , station.CPStation '\
             'from categorie_vehicule ,type_vehicule ,appartient ,correspond,vehicule,station, se_situe ' \
             'where  vehicule.NumVehicule = %(id)s ' \
             'and categorie_vehicule.CodeCateg = correspond.CodeCateg ' \
@@ -216,6 +217,7 @@ with psycopg.connect("host="+HOST+" user="+USERNAME+" password="+PASS) as conn:
         print(cur.fetchall())
         aff_véhicules("1")
         print(cur.fetchall())
+
         def add_véhicules():
             pass
         

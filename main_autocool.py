@@ -182,10 +182,11 @@ with psycopg.connect("host="+HOST+" user="+USERNAME+" password="+PASS) as conn:
                 print("commande SQL exécuté avec succès.")
             except Exception as e:
                 exit("error when running: " + commande + " : " + str(e))
-        lst_vehicules("S")
+        # lst_vehicules("S")
 
         def aff_véhicules(numvéhicules):
-            pass
+            numvéhicules = int(numvéhicules)
+
         def add_véhicules():
             pass
         
@@ -232,8 +233,32 @@ with psycopg.connect("host="+HOST+" user="+USERNAME+" password="+PASS) as conn:
                     reponce = input("choisiser une formule ( « Classique », « Coopérative » ou « Liberté »)\n" \
                     "ou retourner au menu principal : q\n"
                     "ou modif d'un prix : modif\n")
+                    if reponce == "q":
+                        m2 = False
             elif reponce =="3":
-                pass
+                m3 = True
+                while m3 :
+                    reponce = input("pouvoir consulter la liste des voitures après avoir sélectionné une catégorie de véhicule(« S», « M « ou « L »)\n" \
+                    "ou retourner au menu principal : q\n"
+                    "saisir les informations concernant une nouvelle voiture :«nouvelle voiture» ou «n»\n")
+                    if reponce == "q":
+                        m3 = False
+                    if reponce in("M","S","L"):
+                        lst_vehicules(reponce)
+                        print(cur.fetchall())
+                        m31 = True
+                        while m31 :
+                            reponce = input("entre votre  NumVehicule:\n" \
+                            "ou retourner au menu principal : q\n")
+                            if reponce == "q":
+                                m31 = False
+                            else :
+                                try :
+                                    aff_véhicules()
+                                    print(cur.fetchall())
+                                except Exception as e:
+                                    prilst_aderentnt("votre entrer comporte une erreur "+ str(e))
+
             elif reponce =="4":
                 pass
             elif reponce =="5":

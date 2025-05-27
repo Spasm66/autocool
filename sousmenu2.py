@@ -31,7 +31,7 @@ def update_tarif_h(formule, CodeTrancheH, CodeCateg, new_price):
         formule = 2
     elif formule == "Liberté":
         numformule = 3
-    command = 'UPDATE facturer2 SET tarifh = %(price)s ' \
+    command = 'UPDATE facturer1 SET tarifh = %(price)s ' \
         	    'WHERE CodeTrancheH = %(TrancheH)s ' \
                 'AND CodeCateg = %(Categ)s ' \
                 'AND CodeFormule = %(formule)s'

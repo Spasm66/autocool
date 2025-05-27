@@ -218,8 +218,56 @@ with psycopg.connect("host="+HOST+" user="+USERNAME+" password="+PASS) as conn:
         aff_véhicules("1")
         print(cur.fetchall())
 
-        def add_véhicules():
-            pass
+        def formulaire_v():
+            def check_type_vehicule(type):
+                if type in ("Polyvalente", "Break", "Citadine", "Ludospace", "Utilitaire" , "Familiale"):
+                    return type 
+                else :
+                    print("type invalide")
+                    return check_type_vehicule(input("type vehicule :"))
+            def validate_boolean(bool_str):
+                bool_str_lower = bool_str.lower()
+                if bool_str_lower in ('oui','true', '1'):
+                    return True
+                elif bool_str_lower in ('non','false', '0'):
+                    return False
+                else:
+                    print("Invalid boolean value.oui ou non.")
+                    return validate_boolean(input("automatique oui ou non :"))
+
+            while True:
+                try:
+                    reponce1 = input("station :")
+                    reponce2 = input("ville :")
+                    reponce3 = check_type_vehicule(input("type vehicule :"))
+                    reponce4 = input("nombre de place :")
+                    reponce5 = validate_boolean(input("automatique oui ou non :"))
+                    reponce6 = int(input("kilometrage :"))
+                    reponce7 = int(input("niveau d'essence :"))
+
+
+
+                    
+                    # Create a tuple with all the responses
+                    reponses = (
+                        reponce1, reponce2, reponce3, reponce4, reponce5,
+                        reponce6, reponce7
+                    )
+
+
+                    return reponses
+
+                except ValueError as e:
+                    print(f"Error: {e}. Please try again.")
+        print(formulaire_v())
+
+        def add_véhicules(formulaire_v):
+            commande = ''
+            try:
+                cur.execute(commande,{'id':numvéhicules})
+                print("commande SQL exécuté avec succès.")
+            except Exception as e:
+                print("error when running: " + commande + " : " + str(e))
         
         main = True
         while main :

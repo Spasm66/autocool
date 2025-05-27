@@ -110,7 +110,7 @@ CREATE TABLE type_vehicule(
     NbPlaces        INT,
     Automatique BOOLEAN,
     CONSTRAINT "pk_CodeTypeV"       PRIMARY KEY (CodeTypeV),
-    CONSTRAINT "chk_LibelleTypeV"   CHECK (LibelleTypeV = 'City' OR LibelleTypeV = 'Poly' OR LibelleTypeV = 'Break' OR LibelleTypeV = 'Util')
+    CONSTRAINT "chk_LibelleTypeV"   CHECK (LibelleTypeV = 'Polyvalente' OR LibelleTypeV = 'Break' OR LibelleTypeV = 'Citadine' OR LibelleTypeV = 'Ludospace' OR LibelleTypeV = 'Utilitaire' OR LibelleTypeV = 'Familiale')
 );
 
 CREATE TABLE se_situe(

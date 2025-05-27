@@ -101,12 +101,13 @@ with psycopg.connect("host="+HOST+" user="+USERNAME+" password="+PASS) as conn:
 
             def validate_boolean(bool_str):
                 bool_str_lower = bool_str.lower()
-                if bool_str_lower in ('true', '1'):
+                if bool_str_lower in ('oui','true', '1'):
                     return True
-                elif bool_str_lower in ('false', '0'):
+                elif bool_str_lower in ('non','false', '0'):
                     return False
                 else:
-                    raise ValueError("Invalid boolean value. Use true/false or 1/0.")
+                    print("Invalid boolean value.oui ou non.")
+                    return validate_boolean(input("automatique oui ou non :"))
 
             def validate_phone(phone_str):
                 if  len(phone_str) != 10:
@@ -223,25 +224,26 @@ with psycopg.connect("host="+HOST+" user="+USERNAME+" password="+PASS) as conn:
                 if type in ("Polyvalente", "Break", "Citadine", "Ludospace", "Utilitaire" , "Familiale"):
                     return type 
                 else :
-                    print("type invalide")
+                    print("type invalide .Chaque véhicule a un type : Polyvalente, Break, Citadine, Ludospace, Utilitaire et Familiale. ")
                     return check_type_vehicule(input("type vehicule :"))
-            def validate_boolean(bool_str):
-                bool_str_lower = bool_str.lower()
-                if bool_str_lower in ('oui','true', '1'):
-                    return True
-                elif bool_str_lower in ('non','false', '0'):
-                    return False
-                else:
-                    print("Invalid boolean value.oui ou non.")
-                    return validate_boolean(input("automatique oui ou non :"))
+
+            def chek_numstation(num):
+                
+                commande = 'select NumStation from station where NumStation =%s'
+                try:
+                    cur.execute(commande, (num,))
+                    print("commande SQL exécuté avec succès.")
+                except Exception as e:
+                    exit("error when running: " + commande + " : " + str(e))
+                if cur.rowcount == 1:
+                    return num
+                print('station n existe pas')
+                return chek_numstation(int(input("NumStation : ")))
 
             while True:
                 try:
-                    reponce1 = input("station :")
-                    reponce2 = input("ville :")
+                    reponce1 = chek_numstation(int(input("NumStation : ")))
                     reponce3 = check_type_vehicule(input("type vehicule :"))
-                    reponce4 = input("nombre de place :")
-                    reponce5 = validate_boolean(input("automatique oui ou non :"))
                     reponce6 = int(input("kilometrage :"))
                     reponce7 = int(input("niveau d'essence :"))
 
@@ -250,7 +252,7 @@ with psycopg.connect("host="+HOST+" user="+USERNAME+" password="+PASS) as conn:
                     
                     # Create a tuple with all the responses
                     reponses = (
-                        reponce1, reponce2, reponce3, reponce4, reponce5,
+                        reponce1, reponce3,
                         reponce6, reponce7
                     )
 
@@ -259,16 +261,60 @@ with psycopg.connect("host="+HOST+" user="+USERNAME+" password="+PASS) as conn:
 
                 except ValueError as e:
                     print(f"Error: {e}. Please try again.")
-        print(formulaire_v())
+        #print(formulaire_v())
+        
 
         def add_véhicules(formulaire_v):
-            commande = ''
+            NumStation, type_vehicule, Kilometrage, NiveauEssence = formulaire_v
+
+            commande1= 'INSERT INTO vehicule (Kilometrage, NiveauEssence)' \
+            'VALUES' \
+            '(%(Kilometrage)s,%(NiveauEssence)s);' \
+            ''
+
+            commande_intermediaire ='select max(NumVehicule) from vehicule'
+            commande_intermediaire2= 'select CodeTypeV from type_vehicule where LibelleTypeV = %s'
+
+            commande2 = 'INSERT INTO se_situe (NumVehicule, NumStation)' \
+            'VALUES' \
+            '(%(NumVehicule)s,%(NumStation)s);' \
+            'INSERT INTO appartient (NumVehicule, CodeTypeV)' \
+            'VALUES' \
+            '(%(NumVehicule)s,%(CodeTypeV)s);' 
+
             try:
-                cur.execute(commande,{'id':numvéhicules})
+                cur.execute(commande1,{"Kilometrage":Kilometrage,"NiveauEssence":NiveauEssence})
                 print("commande SQL exécuté avec succès.")
             except Exception as e:
-                print("error when running: " + commande + " : " + str(e))
+                print("error when running: " + commande1 + " : " + str(e))
+
+            try:
+                cur.execute(commande_intermediaire,{})
+                NumVehicule = cur.fetchall()[0]['max']
+                print("commande SQL exécuté avec succès.")
+
+            except Exception as e:
+                print("error when running: " + commande_intermediaire + " : " + str(e))
+
+            try:
+                cur.execute(commande_intermediaire2,(type_vehicule,))
+                CodeTypeV = cur.fetchall()[0]['CodeTypeV']
+                print("commande SQL exécuté avec succès.")
+
+            except Exception as e:
+                print("error when running: " + commande_intermediaire2 + " : " + str(e))
+
+            try:
+                cur.execute(commande2,{'NumVehicule':NumVehicule,"NumStation":NumStation,"CodeTypeV":CodeTypeV})
+                print("commande SQL exécuté avec succès.")
+            except Exception as e:
+                print("error when running: " + commande2 + " : " + str(e))
         
+        
+
+
+
+
         main = True
         while main :
             reponce = input("Sous-menu « Gestion des adhérents » : 1 \n" \
@@ -319,7 +365,7 @@ with psycopg.connect("host="+HOST+" user="+USERNAME+" password="+PASS) as conn:
                 while m3 :
                     reponce = input("pouvoir consulter la liste des voitures après avoir sélectionné une catégorie de véhicule(« S», « M « ou « L »)\n" \
                     "ou retourner au menu principal : q\n"
-                    "saisir les informations concernant une nouvelle voiture :«nouvelle voiture» ou «n»\n")
+                    "saisir les informations concernant une nouvelle voiture :«nouvelle_voiture» ou «n»\n")
                     if reponce == "q":
                         m3 = False
                     if reponce in("M","S","L"):
@@ -337,6 +383,8 @@ with psycopg.connect("host="+HOST+" user="+USERNAME+" password="+PASS) as conn:
                                     print(cur.fetchall())
                                 except Exception as e:
                                     print("votre entrer comporte une erreur "+ str(e))
+                    if reponce in('nouvelle_voiture','n'):
+                        add_véhicules(formulaire_v())
 
             elif reponce =="4":
                 pass
@@ -344,6 +392,6 @@ with psycopg.connect("host="+HOST+" user="+USERNAME+" password="+PASS) as conn:
                 pass
             else :
                 print("votre entrer comporte une erreur ")
-
+        #close connecte a faire
     
     

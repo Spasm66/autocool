@@ -40,7 +40,7 @@ def update_tarif_h(formule, CodeTrancheH, CodeCateg, new_price):
     except Exception as e:
             exit("error when running: " + command + " : " + str(e))
 
-def update_tarif_h(formule, CodeTrancheKm, CodeCateg, new_price):
+def update_tarif_km(formule, CodeTrancheKm, CodeCateg, new_price):
     if formule == "Classique":
         numformule = 1
     elif formule == "Coopérative":

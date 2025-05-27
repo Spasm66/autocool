@@ -310,20 +310,9 @@ with psycopg.connect("host="+HOST+" user="+USERNAME+" password="+PASS) as conn:
             except Exception as e:
                 print("error when running: " + commande2 + " : " + str(e))
         
-        commande_intermediaire2= 'select CodeTypeV from type_vehicule where LibelleTypeV = %s'
-        try:
-                cur.execute(commande_intermediaire2,("Polyvalente",))
-                #CodeTypeV = cur.fetchall()[0]['CodeTypeV']
-                print("commande SQL exécuté avec succès.")
-
-        except Exception as e:
-                print("error when running: " + commande_intermediaire2 + " : " + str(e))
-
-        print(cur.fetchall())
+        
 
 
-
-        add_véhicules(formulaire_v())
 
 
         main = True
@@ -376,7 +365,7 @@ with psycopg.connect("host="+HOST+" user="+USERNAME+" password="+PASS) as conn:
                 while m3 :
                     reponce = input("pouvoir consulter la liste des voitures après avoir sélectionné une catégorie de véhicule(« S», « M « ou « L »)\n" \
                     "ou retourner au menu principal : q\n"
-                    "saisir les informations concernant une nouvelle voiture :«nouvelle voiture» ou «n»\n")
+                    "saisir les informations concernant une nouvelle voiture :«nouvelle_voiture» ou «n»\n")
                     if reponce == "q":
                         m3 = False
                     if reponce in("M","S","L"):
@@ -394,6 +383,8 @@ with psycopg.connect("host="+HOST+" user="+USERNAME+" password="+PASS) as conn:
                                     print(cur.fetchall())
                                 except Exception as e:
                                     print("votre entrer comporte une erreur "+ str(e))
+                    if reponce in('nouvelle_voiture','n'):
+                        add_véhicules(formulaire_v())
 
             elif reponce =="4":
                 pass

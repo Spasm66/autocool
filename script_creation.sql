@@ -78,12 +78,12 @@ CREATE TABLE facturer1(
 CREATE TABLE facturer2(
     CodeFacture2    SERIAL,
     CodeFormule     INT,
-    CodeTrancheKm   CHAR (1),
+    CodeTrancheKm   INT,
     CodeCateg       CHAR (1),
     TarifKm         INT,
     CONSTRAINT "pk_CodeFacture2"    PRIMARY KEY (CodeFacture2),
     CONSTRAINT "fk_CodeFormule"     FOREIGN KEY (CodeFormule) REFERENCES formule(CodeFormule),
-    CONSTRAINT "fk_CodeTrancheKm"   FOREIGN KEY (CodeTrancheKm) REFERENCES trache_horaire(CodeTrancheH),
+    CONSTRAINT "fk_CodeTrancheKm"   FOREIGN KEY (CodeTrancheKm) REFERENCES tranche_km(CodeTrancheKm),
     CONSTRAINT "fk_CodeCateg"       FOREIGN KEY (CodeCateg) REFERENCES categorie_vehicule(CodeCateg)
 );
 

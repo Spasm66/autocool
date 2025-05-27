@@ -40,9 +40,9 @@ with psycopg.connect("host="+HOST+" user="+USERNAME+" password="+PASS) as conn:
                 exit("error when running: " + commande + " : " + str(e))
         Affi_adherent(1)
         print(cur.fetchall())
-        def Ajout_adherent(adherent_data):
+        def Ajout_adherent(formulaire):
             # Unpack the tuple into individual variables
-            Nom, Prenom, DateNaissance, Rue, CodePostal, Tel, TelMobile, Email, NumPermis, LieuPermis, DatePermis, PaimentAdhesion, PaimentCaution, RIBfourni, nomformule = adherent_data
+            Nom, Prenom, DateNaissance, Rue, CodePostal, Tel, TelMobile, Email, NumPermis, LieuPermis, DatePermis, PaimentAdhesion, PaimentCaution, RIBfourni, nomformule = formulaire
             if nomformule == "Classique":
                 numformule = 1
             elif nomformule == "Coopérative":
@@ -77,18 +77,18 @@ with psycopg.connect("host="+HOST+" user="+USERNAME+" password="+PASS) as conn:
             except Exception as e:
                 exit("error when running: " + commande_adhere + " : " + str(e))
 
-
-        adherent_data = (
+        """
+        formulaire = (
             "conard19q", "Jean", "1985-05-15", "123 Rue de Paris", "75001",
             "0123456789", "0612345678", "jean.dupont@example.com", "123456789",
             "Paris", "2005-06-10", True, True, "FR7630001007941234567890185", "Classique"
         )
 
-        Ajout_adherent(adherent_data)
+        Ajout_adherent(formulaire)
 
         Affi_adherent(19)
         print(cur.fetchall())
-
+        """
 
         
 
@@ -173,7 +173,9 @@ with psycopg.connect("host="+HOST+" user="+USERNAME+" password="+PASS) as conn:
         #a verifier
         def lst_vehicules(categorie):
             #Liste des véhicules d’une catégorie (« S », « M » ou « L »)
-            commande = 'select NumVehicule from categorie_vehicule ,type_vehicule ,appartient ,correspond where LibelleCateg = %(id)s ' \
+            commande = 'select NumVehicule ' \
+            'from categorie_vehicule ,type_vehicule ,appartient ,correspond' \
+            'where LibelleCateg = %(id)s ' \
             'and categorie_vehicule.CodeCateg = correspond.CodeCateg' \
             'and correspond.CodeTypeV = type_vehicule.CodeTypeV' \
             'and appartient.CodeTypeV = type_vehicule.CodeTypeV' 
@@ -182,10 +184,11 @@ with psycopg.connect("host="+HOST+" user="+USERNAME+" password="+PASS) as conn:
                 print("commande SQL exécuté avec succès.")
             except Exception as e:
                 exit("error when running: " + commande + " : " + str(e))
-        # lst_vehicules("S")
+        lst_vehicules("S")
 
         def aff_véhicules(numvéhicules):
             numvéhicules = int(numvéhicules)
+            commande = 'select NumVehicule '
 
         def add_véhicules():
             pass
@@ -254,10 +257,10 @@ with psycopg.connect("host="+HOST+" user="+USERNAME+" password="+PASS) as conn:
                                 m31 = False
                             else :
                                 try :
-                                    aff_véhicules()
+                                    aff_véhicules(reponce)
                                     print(cur.fetchall())
                                 except Exception as e:
-                                    prilst_aderentnt("votre entrer comporte une erreur "+ str(e))
+                                    print("votre entrer comporte une erreur "+ str(e))
 
             elif reponce =="4":
                 pass

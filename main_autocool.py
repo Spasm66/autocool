@@ -174,22 +174,48 @@ with psycopg.connect("host="+HOST+" user="+USERNAME+" password="+PASS) as conn:
         def lst_vehicules(categorie):
             #Liste des véhicules d’une catégorie (« S », « M » ou « L »)
             commande = 'select NumVehicule ' \
-            'from categorie_vehicule ,type_vehicule ,appartient ,correspond' \
-            'where LibelleCateg = %(id)s ' \
-            'and categorie_vehicule.CodeCateg = correspond.CodeCateg' \
-            'and correspond.CodeTypeV = type_vehicule.CodeTypeV' \
-            'and appartient.CodeTypeV = type_vehicule.CodeTypeV' 
+            'from categorie_vehicule ,type_vehicule ,appartient ,correspond ' \
+            'where  categorie_vehicule.CodeCateg = %(id)s ' \
+            'and categorie_vehicule.CodeCateg = correspond.CodeCateg ' \
+            'and correspond.CodeTypeV = type_vehicule.CodeTypeV ' \
+            'and appartient.CodeTypeV = type_vehicule.CodeTypeV ' 
             try:
                 cur.execute(commande,{'id':categorie})
                 print("commande SQL exécuté avec succès.")
             except Exception as e:
                 exit("error when running: " + commande + " : " + str(e))
-        #lst_vehicules("S")
+        print("test")
+        lst_vehicules("S")
+        print(cur.fetchall())
+        lst_vehicules("M")
+        print(cur.fetchall())
+        lst_vehicules("L")
+        print(cur.fetchall())
 
         def aff_véhicules(numvéhicules):
             numvéhicules = int(numvéhicules)
-            commande = 'select NumVehicule '
+            commande = 'select vehicule.NumVehicule, Kilometrage ,NiveauEssence,type_vehicule.LibelleTypeV , NbPlaces ,Automatique '\
+            'from categorie_vehicule ,type_vehicule ,appartient ,correspond,vehicule,station, se_situe ' \
+            'where  vehicule.NumVehicule = %(id)s ' \
+            'and categorie_vehicule.CodeCateg = correspond.CodeCateg ' \
+            'and correspond.CodeTypeV = type_vehicule.CodeTypeV ' \
+            'and appartient.CodeTypeV = type_vehicule.CodeTypeV ' \
+            'and station.NumStation = se_situe.NumStation ' \
+            'and se_situe.NumVehicule = vehicule.NumVehicule ' \
+            'and vehicule.NumVehicule = appartient.NumVehicule' 
+            try:
+                cur.execute(commande,{'id':numvéhicules})
+                print("commande SQL exécuté avec succès.")
+            except Exception as e:
+                exit("error when running: " + commande + " : " + str(e))
 
+        print("test")
+        aff_véhicules("2")
+        print(cur.fetchall())
+        aff_véhicules("3")
+        print(cur.fetchall())
+        aff_véhicules("1")
+        print(cur.fetchall())
         def add_véhicules():
             pass
         

@@ -83,10 +83,12 @@ VALUES
     ('Station 3', 'Marseille', '13003');
 INSERT INTO type_vehicule (LibelleTypeV, NbPlaces, Automatique)
 VALUES
-    ('City', 4, TRUE),
-    ('Poly', 5, FALSE),
-    ('Break', 5, TRUE),
-    ('Util', 3, FALSE);
+    ('Polyvalente', 4, TRUE),
+    ('Break', 5, FALSE),
+    ('Citadine', 5, TRUE),
+    ('Ludospace', 3, FALSE),
+    ('Utilitaire',15,FALSE),
+    ('Familiale',6,TRUE);
 INSERT INTO se_situe (NumVehicule, NumStation)
 VALUES
     (1, 1),

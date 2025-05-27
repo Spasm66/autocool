@@ -184,7 +184,7 @@ with psycopg.connect("host="+HOST+" user="+USERNAME+" password="+PASS) as conn:
                 print("commande SQL exécuté avec succès.")
             except Exception as e:
                 exit("error when running: " + commande + " : " + str(e))
-        lst_vehicules("S")
+        #lst_vehicules("S")
 
         def aff_véhicules(numvéhicules):
             numvéhicules = int(numvéhicules)

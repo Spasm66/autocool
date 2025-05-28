@@ -42,17 +42,59 @@ def station_with_5L():
         exit("error when running: " + command + " : " + str(e))
 
 def station_with_SM():
-    command = 'SELECT se_situe.NumStation, LieuStation, VilleStation, CPStation ' \
+    command = 'SELECT DISTINCT(se_situe.NumStation), LieuStation, VilleStation, CPStation ' \
                 'FROM se_situe, station, appartient, correspond ' \
                 'WHERE CodeCateg = \'S\' ' \
                 'AND correspond.CodeTypeV = appartient.CodeTypeV ' \
                 'AND appartient.NumVehicule = se_situe.NumVehicule ' \
-                'AND se_situe.NumStation =  station.NumStation AND se_situe.Numstation IN ' \
-                '(SELECT se_situe.NumStation FROM se_situe, station, appartient, correspond ' \
+                'AND se_situe.NumStation =  station.NumStation ' \
+                'AND se_situe.Numstation IN ' \
+                '(SELECT se_situe.NumStation ' \
+                'FROM se_situe, station, appartient, correspond ' \
+                'WHERE CodeCateg = \'M\' ' \
+                'AND correspond.CodeTypeV = appartient.CodeTypeV ' \
+                'AND appartient.NumVehicule = se_situe.NumVehicule ' \
+                'AND se_situe.NumStation =  station.NumStation); ' 
+    try:
+        cur.execute(command)
+    except Exception as e:
+        exit("error when running: " + command + " : " + str(e))
+
+def station_without_break():
+    command = 'SELECT NumStation, LieuStation, VilleStation, CPStation ' \
+     'FROM station ' \
+     'WHERE NumStation NOT IN ' \
+     '(SELECT se_situe.NumStation ' \
+     'FROM se_situe, appartient, type_vehicule ' \
+     'WHERE LibelleTypeV = \'Break\' ' \
+     'AND type_vehicule.CodeTypeV = appartient.CodeTypeV ' \
+     'AND appartient.NumVehicule = se_situe.NumVehicule); '
+    try:
+        cur.execute(command)
+    except Exception as e:
+        exit("error when running: " + command + " : " + str(e))
+
+def station_with_SML():
+    command = 'SELECT DISTINCT(se_situe.NumStation), LieuStation, VilleStation, CPStation ' \
+                'FROM se_situe, station, appartient, correspond ' \
+                'WHERE CodeCateg = \'S\' ' \
+                'AND correspond.CodeTypeV = appartient.CodeTypeV ' \
+                'AND appartient.NumVehicule = se_situe.NumVehicule ' \
+                'AND se_situe.NumStation =  station.NumStation ' \
+                'AND se_situe.Numstation IN ' \
+                '(SELECT se_situe.NumStation ' \
+                'FROM se_situe, station, appartient, correspond ' \
                 'WHERE CodeCateg = \'M\' ' \
                 'AND correspond.CodeTypeV = appartient.CodeTypeV ' \
                 'AND appartient.NumVehicule = se_situe.NumVehicule ' \
                 'AND se_situe.NumStation =  station.NumStation); ' \
+                'AND se_situe.Numstation IN ' \
+                '(SELECT se_situe.NumStation ' \
+                'FROM se_situe, station, appartient, correspond ' \
+                'WHERE CodeCateg = \'L\' ' \
+                'AND correspond.CodeTypeV = appartient.CodeTypeV ' \
+                'AND appartient.NumVehicule = se_situe.NumVehicule ' \
+                'AND se_situe.NumStation =  station.NumStation); ' 
     try:
         cur.execute(command)
     except Exception as e:

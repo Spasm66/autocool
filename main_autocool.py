@@ -711,7 +711,31 @@ with psycopg.connect("host="+HOST+" user="+USERNAME+" password="+PASS) as conn:
                         print(cur.fetchall())
 
             elif reponce == "5":
-                pass
+                m5 = True
+                while m5:
+                    reponce = input("Sous-menu « Vue »\n\
+                                1• Affichage des données de la vue V_NbVehiculesParType (Citadine, Break,\
+                                Polyvalente, Ludospace, Familiale ou Utilitaire).\n\
+                                2• Liste des types ayant plus de 10 véhicules (à partir de la vue)")
+                    if reponce == "1":
+                        command = 'select * from V_NbVehiculesParType'
+                        try:
+                            cur.execute(command)
+                            print(cur.fetchall())
+                        except Exception as e:
+                            print("error when running: " +
+                                  command + " : " + str(e))
+                    elif reponce == "2":
+                        command = 'SELECT LibelleTypeV \
+                                    FROM V_NbVehiculesParType\
+                                    WHERE nb_vehicule > 10;'
+                        try:
+                            cur.execute(command)
+                            print(cur.fetchall())
+                        except Exception as e:
+                            print("error when running: " +
+                                  command + " : " + str(e))
+
             else:
                 print("votre entrer comporte une erreur ")
 

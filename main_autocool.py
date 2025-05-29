@@ -162,7 +162,8 @@ with psycopg.connect("host="+HOST+" user="+USERNAME+" password="+PASS) as conn:
                 formule = 2
             elif formule == "Liberté":
                 numformule = 3
-            command = 'SELECT CodeTrancheH, CodeFormule, CodeCateg, TarifH FROM facturer1 WHERE CodeFormule = %s'
+            command = 'SELECT Duree, CodeFormule, CodeCateg, TarifH FROM facturer1, tranche_horaire WHERE CodeFormule = %s ' \
+                'and tranche_horaire.CodeTrancheH = facturer1.CodeTrancheH '
             try:
                 cur.execute(command, numformule)
             except Exception as e:
@@ -175,7 +176,8 @@ with psycopg.connect("host="+HOST+" user="+USERNAME+" password="+PASS) as conn:
                 formule = 2
             elif formule == "Liberté":
                 numformule = 3
-            command = 'SELECT CodeTrancheKm, CodeFormule, CodeCateg, TarifKm FROM facturer2 WHERE CodeFormule = %s'
+            command = 'SELECT MinKm, MaxKm, CodeFormule, CodeCateg, TarifKm FROM facturer2, tranche_km WHERE CodeFormule = %s' \
+                'and tranche_km.CodeTrancheKm = facturer2.CodeTrancheKm '
             try:
                 cur.execute(command, numformule)
             except Exception as e:
@@ -669,7 +671,45 @@ with psycopg.connect("host="+HOST+" user="+USERNAME+" password="+PASS) as conn:
                         add_véhicules(formulaire_v())
 
             elif reponce == "4":
-                pass
+                m4 = True
+                while m4:
+                    reponce = input("Sous-menu « Requêtes »\n \
+                        1. Liste des tarifs horaires (TarifH, CodeCateg, CodeTrancheH) triés par catégorie puis par \
+                        tranche horaire pour la formule « Liberté ».\n \
+                        2. Nombre d’abonnés de chaque formule (LibelleFormule,NbAbonnes).\n \
+                        3. Liste des stations (NumStation,LieuStation,VilleStation,CPStation, NbVehicules) ayant \
+                        plus de 5 véhicules de catégorie L.\n \
+                        4. Liste des stations (NumStation,LieuStation,VilleStation,CPStation) ayant à la fois des \
+                        véhicules de catégorie S et M.\n \
+                        5. Liste des stations (NumStation,LieuStation,VilleStation,CPStation) qui n ont pas de \
+                        véhicule de type « Break ».\n \
+                        6. Liste des stations (NumStation,LieuStation,VilleStation,CPStation) ayant toutes les \
+                        catégories de véhicules (S, M, L, …).\n"
+                                    "ou retourner au menu principal : q\n")
+                    if reponce == "1":
+                        tarif_h()
+                        print(cur.fetchall())
+
+                    elif reponce == "2":
+                        nb_subscriber()
+                        print(cur.fetchall())
+
+                    elif reponce == "3":
+                        station_with_5L
+                        print(cur.fetchall())
+
+                    elif reponce == "4":
+                        station_with_SM()
+                        print(cur.fetchall())
+
+                    elif reponce == "5":
+                        station_without_break()
+                        print(cur.fetchall())
+
+                    elif reponce == "6":
+                        station_with_SML()
+                        print(cur.fetchall())
+
             elif reponce == "5":
                 pass
             else:

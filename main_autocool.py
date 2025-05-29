@@ -155,7 +155,7 @@ with psycopg.connect("host="+HOST+" user="+USERNAME+" password="+PASS) as conn:
 
         # besoin 2
 
-        def affi_tarif(formule):
+        def affi_tarif_h(formule):
             if formule == "Classique":
                 numformule = 1
             elif formule == "Coopérative":
@@ -167,6 +167,164 @@ with psycopg.connect("host="+HOST+" user="+USERNAME+" password="+PASS) as conn:
                 cur.execute(command, numformule)
             except Exception as e:
                 exit("error when running: " + command + " : " + str(e))
+
+        def affi_tarif_km(formule):
+            if formule == "Classique":
+                numformule = 1
+            elif formule == "Coopérative":
+                formule = 2
+            elif formule == "Liberté":
+                numformule = 3
+            command = 'SELECT CodeTrancheKm, CodeFormule, CodeCateg, TarifKm FROM facturer2 WHERE CodeFormule = %s'
+            try:
+                cur.execute(command, numformule)
+            except Exception as e:
+                exit("error when running: " + command + " : " + str(e))
+
+        def update_tarif_h(formule, CodeTrancheH, CodeCateg, new_price):
+            if formule == "Classique":
+                numformule = 1
+            elif formule == "Coopérative":
+                formule = 2
+            elif formule == "Liberté":
+                numformule = 3
+            command = 'UPDATE facturer1 SET tarifh = %(price)s ' \
+                'WHERE CodeTrancheH = %(TrancheH)s ' \
+                'AND CodeCateg = %(Categ)s ' \
+                'AND CodeFormule = %(formule)s'
+            try:
+                cur.execute(command, {'price': new_price, 'formule': numformule,
+                            'TrancheH': CodeTrancheH, 'Categ': CodeCateg})
+            except Exception as e:
+                exit("error when running: " + command + " : " + str(e))
+
+        def update_tarif_km(formule, CodeTrancheKm, CodeCateg, new_price):
+            if formule == "Classique":
+                numformule = 1
+            elif formule == "Coopérative":
+                formule = 2
+            elif formule == "Liberté":
+                numformule = 3
+            command = 'UPDATE facturer2 SET tarifh = %(price)s ' \
+                'WHERE CodeTrancheH = %(TrancheKm)s ' \
+                'AND CodeCateg = %(Categ)s ' \
+                'AND CodeFormule = %(formule)s'
+            try:
+                cur.execute(command, {'price': new_price, 'formule': numformule,
+                            'TrancheKm': CodeTrancheKm, 'Categ': CodeCateg})
+            except Exception as e:
+                exit("error when running: " + command + " : " + str(e))
+
+        def formulaire_tarif():
+            def chekformule():
+                formule = input(
+                    "choisiser une formule ( « Classique », « Coopérative » ou « Liberté »)")
+                if formule in ("Classique", "Coopérative", "Liberté"):
+                    return formule
+                else:
+                    return chekformule()
+
+            def chek_CodeCateg():
+                Categ = input("choisiser une categogie exemple(S,M,L)")
+                command = 'select * from categorie_vehicule where CodeCateg = %(Categ)s '
+                try:
+                    cur.execute(command, {'Categ': Categ})
+                except Exception as e:
+                    print("error when running: " + command + " : " + str(e))
+                if cur.rowcount == 1:
+                    return Categ
+
+                print("erreur")
+                return chek_CodeCateg()
+
+            def chekCodeTrancheH():
+                command = 'select * from tranche_horaire where CodeTrancheH = %(Categ)s '
+                try:
+                    cur.execute(command, {'Categ': Categ})
+                    print(cur.fetchall())
+                except Exception as e:
+                    print("error when running: " + command + " : " + str(e))
+
+                try:
+                    Categ = int(input("choisiser une TrancheH"))
+                except:
+                    print("un nombre svp ")
+
+                command = 'select * from tranche_horaire where CodeTrancheH = %(Categ)s '
+                try:
+                    cur.execute(command, {'Categ': Categ})
+                except Exception as e:
+                    print("error when running: " + command + " : " + str(e))
+                if cur.rowcount == 1:
+                    return Categ
+
+                print("erreur")
+                return chekCodeTrancheH()
+
+            def chekCodeTrancheKM():
+                command = 'select * from tranche_km where CodeTrancheKm = %(Categ)s '
+                try:
+                    cur.execute(command, {'Categ': Categ})
+                    print(cur.fetchall())
+                except Exception as e:
+                    print("error when running: " + command + " : " + str(e))
+
+                try:
+                    Categ = int(input("choisiser une TrancheKM"))
+                except:
+                    print("un nombre svp ")
+
+                command = 'select * from tranche_km where CodeTrancheKm = %(Categ)s '
+                try:
+                    cur.execute(command, {'Categ': Categ})
+                except Exception as e:
+                    print("error when running: " + command + " : " + str(e))
+                if cur.rowcount == 1:
+                    return Categ
+
+                print("erreur")
+                return chekCodeTrancheKM()
+
+            boulce = True
+            while boulce:
+                try:
+                    reponce1 = input("update tarif h : h\n"
+                                     "update tarif km : km")
+                    if reponce1 == "h":
+                        boulce1 = True
+                        while boulce1:
+                            try:
+                                formule = chekformule()
+                                CodeTrancheH = chekCodeTrancheH()
+                                CodeCateg = chek_CodeCateg()
+                                new_price = int(input("new price:"))
+
+                                update_tarif_h(
+                                    formule, CodeTrancheH, CodeCateg, new_price)
+                                boulce1 = False
+
+                            except ValueError as e:
+                                print(f"Error: {e}. Please try again.")
+
+                    elif reponce1 == "km":
+                        boulce1 = True
+                        while boulce1:
+                            try:
+                                formule = chekformule()
+                                CodeTrancheKm = chekCodeTrancheKM()
+                                CodeCateg = chek_CodeCateg()
+                                new_price = int(input("new price:"))
+
+                                update_tarif_km(
+                                    formule, CodeTrancheKm, CodeCateg, new_price)
+                                boulce1 = False
+
+                            except ValueError as e:
+                                print(f"Error: {e}. Please try again.")
+                        # Create a tuple with all the responses
+                    boulce = False
+                except ValueError as e:
+                    print(f"Error: {e}. Please try again.")
 
         # besoin 3
         # a verifier
@@ -425,6 +583,7 @@ with psycopg.connect("host="+HOST+" user="+USERNAME+" password="+PASS) as conn:
                             "quitter : q \n")
             if reponce == "q":
                 main = False
+            # fini
             elif reponce == "1":
                 m1 = True
                 while m1:
@@ -460,6 +619,28 @@ with psycopg.connect("host="+HOST+" user="+USERNAME+" password="+PASS) as conn:
                                     "ou modif d'un prix : modif\n")
                     if reponce == "q":
                         m2 = False
+                    elif reponce in ("Classique", "Coopérative", "Liberté"):
+                        try:
+                            affi_tarif_h(reponce)
+                            print(cur.fetchall())
+                        except Exception as e:
+                            print(
+                                "votre entrer comporte une erreur " + str(e))
+                        try:
+                            affi_tarif_km(reponce)
+                            print(cur.fetchall())
+                        except Exception as e:
+                            print(
+                                "votre entrer comporte une erreur " + str(e))
+                    elif reponce == "modif":
+
+                        try:
+                            formulaire_tarif()
+                        except Exception as e:
+                            print(
+                                "votre entrer comporte une erreur " + str(e))
+
+            # fini
             elif reponce == "3":
                 m3 = True
                 while m3:
@@ -493,4 +674,5 @@ with psycopg.connect("host="+HOST+" user="+USERNAME+" password="+PASS) as conn:
                 pass
             else:
                 print("votre entrer comporte une erreur ")
-        # close connecte a faire
+
+    # close connecte a faire

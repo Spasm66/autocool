@@ -3,8 +3,8 @@ from datetime import datetime
 
 # Try to connect to an existing database
 print('Connexion à la base de données...')
-USERNAME = "niandrieu"
-PASS = "lijuju.33"
+USERNAME = "nom d'utilisateur"
+PASS = "mots de pass"
 HOST = 'pgsql'
 with psycopg.connect("host="+HOST+" user="+USERNAME+" password="+PASS) as conn:
     print('Connecté à la base de données')
@@ -329,7 +329,6 @@ with psycopg.connect("host="+HOST+" user="+USERNAME+" password="+PASS) as conn:
                     print(f"Error: {e}. Please try again.")
 
         # besoin 3
-        # a verifier
 
         def lst_vehicules(categorie):
             # Liste des véhicules d’une catégorie (« S », « M » ou « L »)
@@ -738,5 +737,3 @@ with psycopg.connect("host="+HOST+" user="+USERNAME+" password="+PASS) as conn:
 
             else:
                 print("votre entrer comporte une erreur ")
-
-    # close connecte a faire
